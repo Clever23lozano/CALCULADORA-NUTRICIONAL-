@@ -1,8 +1,9 @@
-<title>CALCULADORA-NUTRICIONAL</title> 
+
 <html lang="es"> 
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>CALCULADORA-NUTRICIONAL</title> 
   <title>Registro e Inicio de Sesión</title> 
   <style>
         body {
