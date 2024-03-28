@@ -2,8 +2,7 @@
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>Calculadora Nutricional</title> 
-  <title>Registro e Inicio de Sesión</title> 
+  <title>Calculadora Nutricional</title>
   <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
