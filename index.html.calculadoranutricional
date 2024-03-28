@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Registro e Inicio de Sesión</title> 
+  <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style> 
+ </head> 
+ <body> 
+  <div class="container"> 
+   <form id="registroForm" onsubmit="registrarUsuario(event)"> 
+    <h1>Registro</h1> <label for="nombreUsuario">Nombre de Usuario:</label> 
+    <input type="text" id="nombreUsuario" name="nombreUsuario" required>
+    <br> <label for="correo">Correo Electrónico:</label> 
+    <input type="email" id="correo" name="correo" required>
+    <br> <label for="contrasena">Contraseña:</label> 
+    <input type="password" id="contrasena" name="contrasena" required>
+    <br> <button type="submit">Registrarse</button> <button type="button" onclick="registrarConGoogle()">Registrarse con Google</button> 
+   </form> 
+   <form id="inicioSesionForm" onsubmit="iniciarSesion(event)"> 
+    <h1>Iniciar Sesión</h1> <label for="correoInicio">Correo Electrónico:</label> 
+    <input type="email" id="correoInicio" name="correoInicio" required>
+    <br> <label for="contrasenaInicio">Contraseña:</label> 
+    <input type="password" id="contrasenaInicio" name="contrasenaInicio" required>
+    <br> <button type="submit">Iniciar Sesión</button> <a href="#" onclick="recuperarContrasena()">¿Olvidaste tu contraseña?</a> 
+   </form> 
+   <p class="footer">© 2024 Calculadora Nutricional. Todos los derechos reservados.</p> 
+  </div> <!-- Incluir Firebase mediante etiquetas script --> 
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script> 
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script> 
+  <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBAyn2xWuA8kv0w0WcqFdkBMHMNf2IBq00",
+            authDomain: "calculadora-nutricional-ff61e.firebaseapp.com",
+            projectId: "calculadora-nutricional-ff61e"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Función para registrar un usuario
+        function registrarUsuario(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+            // Obtener valores del formulario
+            var nombreUsuario = document.getElementById("nombreUsuario").value;
+            var correo = document.getElementById("correo").value;
+            var contrasena = document.getElementById("contrasena").value;
+
+            // Crear cuenta de usuario con correo y contraseña
+            firebase.auth().createUserWithEmailAndPassword(correo, contrasena)
+            .then((userCredential) => { 
+              // Usuario registrado correctamente
+                var user = userCredential.user;
+                console.log("Usuario registrado:", user);
+                alert("¡Registro exitoso!");
+            })
+            .catch((error) => {
+                // Error al registrar usuario
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error("Error:", errorMessage);
+                alert("Error al registrar usuario: " + errorMessage);
+            });
+        }
+
+        // Función para iniciar sesión
+        function iniciarSesion(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+            // Obtener valores del formulario
+            var correoInicio = document.getElementById("correoInicio").value;
+            var contrasenaInicio = document.getElementById("contrasenaInicio").value;
+
+            // Iniciar sesión con correo y contraseña
+            firebase.auth().signInWithEmailAndPassword(correoInicio, contrasenaInicio)
+            .then((userCredential) => {
+                // Usuario inició sesión correctamente
+                var user = userCredential.user;
+                console.log("Usuario autenticado:", user);
+                alert("¡Inicio de sesión exitoso!");
+            })
+            .catch((error) => {
+                // Error al iniciar sesión
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error("Error:", errorMessage);
+                alert("Error al iniciar sesión: " + errorMessage);
+            });
+        }
+
+        // Función para recuperar contraseña
+        function recuperarContrasena() {
+            var correoRecuperacion = prompt("Ingresa tu correo electrónico para recuperar tu contraseña:");
+            
+            if (correoRecuperacion) {
+                firebase.auth().sendPasswordResetEmail(correoRecuperacion)
+                .then(() => {
+                    // Email de recuperación enviado
+                    alert("Se ha enviado un correo electrónico de recuperación de contraseña a " + correoRecuperacion);
+                })
+                .catch((error) => {
+                    // Error al enviar email de recuperación
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error:", errorMessage);
+                    alert("Error al enviar correo electrónico de recuperación: " + errorMessage);
+                });
+            }
+        }
+
+        // Iniciar sesión con Google
+        function registrarConGoogle() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                // El usuario se ha autenticado correctamente
+                var user = result.user;
+                console.log("Usuario autenticado:", user);
+            })
+            .catch((error) => {
+                // Hubo un error al autenticar al usuario
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error("Error:", errorMessage);
+            });
+        }
+    </script> 
+ </body>
+</html>
