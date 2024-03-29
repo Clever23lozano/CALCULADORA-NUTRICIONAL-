@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es"> 
 <head> 
     <meta charset="UTF-8"> 
@@ -286,6 +287,7 @@
             alert("Error al iniciar sesión: " + errorMessage);
         });
     }
+</script>
 </script> 
 </body>
 </html>
