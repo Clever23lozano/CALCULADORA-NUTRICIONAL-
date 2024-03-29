@@ -286,7 +286,6 @@
             alert("Error al iniciar sesión: " + errorMessage);
         });
     }
-</script>
 </script> 
 </body>
 </html>
